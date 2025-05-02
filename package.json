@@ -20,5 +20,8 @@
   "homepage": "https://github.com/Janinduchamod2001425/SEPQM-2#readme",
   "devDependencies": {
     "cypress": "^14.3.2"
+  },
+  "dependencies": {
+    "@cypress/code-coverage": "^3.14.0"
   }
 }

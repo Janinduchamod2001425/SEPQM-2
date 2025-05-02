@@ -81,13 +81,14 @@ export const login = async (req, res) => {
             return res.status(400).json({message: "Password Incorrect"}); // send error response
         }
 
-        generateToken(user._id, res); // Generate JWT token
+        const token = generateToken(user._id, res); // Generate JWT token
 
         res.status(200).json({
             _id: user._id,
             name: user.name,
             email: user.email,
             role: user.role,
+            token
         })
     } catch (error) {
         console.log("Error in Login controller", error.message); // log errors
