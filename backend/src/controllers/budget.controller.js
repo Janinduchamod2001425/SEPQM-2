@@ -10,19 +10,23 @@ export const addBudget = async (req, res) => {
 
     try {
         // Get the category and amount from the request body
-        const {category, amount} = req.body;
+        const {category, amount, month} = req.body;
+
+        if (!category || !amount || !month) {
+            return res.status(400).json({message: "All fields are required"});
+        }
 
         // Get the user id from the request
         const userId = req.user.id;
 
         // Convert the month to the YYYY-MM format
-        const month = moment().format("YYYY-MM");
+        const normalizedMonth = moment(month, ["MMMM", "YYYY-MM", "MMM"]).format("YYYY-MM");
 
         // Check if the budget already exists
         const existingBudget = await Budget.findOne({
             userId,
             category,
-            month
+            month: normalizedMonth
         });
 
         if (existingBudget) {
@@ -31,7 +35,7 @@ export const addBudget = async (req, res) => {
 
         // Create a new budget
         const newBudget = new Budget({
-            userId, category, amount, month
+            userId, category, amount, month: normalizedMonth
         });
 
         // Save the budget to the database
