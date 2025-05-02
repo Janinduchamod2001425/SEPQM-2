@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import {Server} from "socket.io";
+import * as http from "node:http";
 
 // Database connection
 import {connectDB} from "./lib/db.js";
@@ -27,11 +28,6 @@ const PORT = process.env.PORT || 5001;
 // Connect to the database before start the server
 connectDB().then(r => {
     console.log("✅ Database Connected!");
-
-    // Start watching for changes in Transactions and Goals
-    watchTransactions();
-    watchGoals();
-    watchBudgetStatus();
 });
 
 // Middleware
