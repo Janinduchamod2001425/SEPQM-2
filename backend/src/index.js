@@ -3,15 +3,9 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import {Server} from "socket.io";
-import http from "http";
 
 // Database connection
 import {connectDB} from "./lib/db.js";
-
-// Import Watchers
-import {watchTransactions} from "./service/transaction.service.js";
-import {watchGoals} from "./service/goal.service.js";
-import {watchBudgetStatus} from "./service/budget.service.js";
 
 // Import Routes
 import authRoutes from "./routes/auth.route.js";
@@ -20,7 +14,6 @@ import budgetRoutes from "./routes/budget.route.js";
 import reportRoutes from "./routes/report.route.js";
 import goalRoutes from "./routes/goal.route.js";
 import notificationRoutes from './routes/notification.route.js';
-import currencyRoutes from './routes/currency.route.js';
 import adminRoutes from './routes/admin.route.js';
 import userRoutes from './routes/user.route.js';
 
@@ -55,7 +48,6 @@ app.use("/api/budget", budgetRoutes);
 app.use("/api/report", reportRoutes);
 app.use("/api/goal", goalRoutes);
 app.use("/api/notification", notificationRoutes);
-app.use("/api/currency", currencyRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/user", userRoutes);
 
