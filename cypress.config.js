@@ -7,7 +7,7 @@ module.exports = defineConfig({
         specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
         setupNodeEvents(on, config) {
             // Optional: Add backend URL as env variable
-            config.env.API_URL = 'http://localhost:5001'
+            config.env.API_URL = 'http://localhost:5001/api'
             return config
         }
     },

@@ -1,10 +1,18 @@
-describe('My First Test', () => {
-    it('Visits the Kitchen Sink', () => {
+describe('Cypress Kitchen Sink Tests', () => {
+    it('should demonstrate basic form interactions', () => {
+        // Arrange
+        const testEmail = 'fake@email.com'
+
+        // Act
         cy.visit('https://example.cypress.io')
         cy.contains('type').click()
+
+        // Assert
         cy.url().should('include', '/commands/actions')
+
+        // Act + Assert
         cy.get('.action-email')
-            .type('fake@email.com')
-            .should('have.value', 'fake@email.com')
+            .type(testEmail)
+            .should('have.value', testEmail)
     })
 })
