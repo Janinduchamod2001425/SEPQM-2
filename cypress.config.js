@@ -2,7 +2,7 @@ const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
     e2e: {
-        baseUrl: 'http://localhost:3000', // Adjust to your app's URL
+        baseUrl: 'http://localhost:5173', // Adjust to your app's URL
         specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
         setupNodeEvents(on, config) {
             // Optional: Add backend URL as env variable
