@@ -1,14 +1,17 @@
-function App() {
+import React from "react";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Login from "./pages/LoginPage.jsx";
+import AddBudget from "./pages/AddBudgetPage.jsx";
 
+function App() {
     return (
-        <>
-            <div className="text-xl font-bold">
-                <h1>
-                    Hello World
-                </h1>
-            </div>
-        </>
-    )
+        <Router>
+            <Routes>
+                <Route path="/" element={<Login/>}/>
+                <Route path="/add-budget" element={<AddBudget/>}/>
+            </Routes>
+        </Router>
+    );
 }
 
-export default App
+export default App;
