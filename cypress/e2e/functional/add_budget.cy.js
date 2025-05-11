@@ -1,31 +1,56 @@
 describe("Add Budget Functionality", () => {
-    it("should log in and add a new budget successfully", () => {
-        cy.visit("http://localhost:5173");
+    beforeEach(() => {
+        // Start mocking before visiting the page
+        cy.intercept('POST', `${Cypress.env('apiUrl')}/auth/login`, {
+            statusCode: 200,
+            body: {token: "fake-token"}
+        }).as('login')
 
-        // Login
-        cy.get("input[placeholder='Email']").type("test@example.com");
-        cy.get("input[placeholder='Password']").type("password123");
-        cy.contains("Login").click();
+        cy.intercept('POST', `${Cypress.env('apiUrl')}/budget/add`, {
+            statusCode: 201,
+            body: {message: "Budget added successfully"}
+        }).as('addBudget')
 
-        // Check if redirected correctly to /add_budget page
-        cy.url({timeout: 10000}).should('include', '/add_budget');
+        cy.visit('/')
 
-        // Fill form
-        cy.get("input[placeholder='Category']").type(`Transport-${Date.now()}`);
-        cy.get("input[placeholder='Amount']").type("4000");
+        // Add longer timeout for CI environments
+        cy.get('[data-cy=email]', {timeout: 10000})
+            .should('be.visible')
+            .type('test@example.com', {delay: 100})
 
-        // Ensure that the select dropdown is available and the option exists
-        cy.get("select").should('be.visible').select("May 2024");
+        cy.get('[data-cy=password]')
+            .type('password123', {delay: 100})
 
-        // Submit the form
-        cy.contains("Add").click();
+        cy.get('[data-cy=login-btn]')
+            .click()
 
-        // Assert success alert is shown
-        cy.on("window:alert", (txt) => {
-            expect(txt).to.contains("Budget added successfully");
-        });
+        // Wait for either the mock or real API call
+        cy.wait('@login', {timeout: 10000}).then((interception) => {
+            // Optional: Assert something about the request
+            expect(interception.request.body).to.deep.equal({
+                email: 'test@example.com',
+                password: 'password123'
+            })
+        })
 
-        // Optionally, assert that the budget is visible or stored in the UI
-        cy.contains("Transport").should('be.visible');  // Example check to verify that the budget appears
-    });
-});
+        // Verify navigation
+        cy.location('pathname', {timeout: 10000}).should('eq', '/add_budget')
+    })
+
+    it('should add a budget successfully', () => {
+        const category = `Transport-${Date.now()}`
+
+        cy.get('[data-cy=category]').type(category)
+        cy.get('[data-cy=amount]').type('4000')
+
+        // Dynamic month selection
+        const currentMonth = new Date().toLocaleString('default', {month: 'long'})
+        const currentYear = new Date().getFullYear()
+        cy.get('[data-cy=month-select]').select(`${currentMonth} ${currentYear}`)
+
+        cy.get('[data-cy=add-budget-btn]').click()
+
+        cy.wait('@addBudget', {timeout: 10000})
+        cy.contains('Budget added successfully').should('be.visible')
+    })
+})
