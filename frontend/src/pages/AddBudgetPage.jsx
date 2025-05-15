@@ -29,7 +29,7 @@ const AddBudgetPage = () => {
             const normalizedMonth = new Date(`${month} 1`).toISOString().slice(0, 7);
             const res = await api.post("/budget/add", {
                 category,
-                amount,
+                amount: Number(amount),
                 month: normalizedMonth
             });
             toast.success(res.data.message);
