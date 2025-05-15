@@ -7,7 +7,7 @@ module.exports = defineConfig({
             apiUrl: "http://localhost:5001/api", // Backend API URL (adjust port as needed)
         },
         setupNodeEvents(on, config) {
-            // Optional: Add plugins or modify config here
+           
         },
     },
 });
